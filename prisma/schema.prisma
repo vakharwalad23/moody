@@ -34,6 +34,8 @@ model JournalEntry {
   updatedAt DateTime @updatedAt
 
   Analysis Analysis?
+
+  @@unique([userId, id])
 }
 
 model Analysis {
