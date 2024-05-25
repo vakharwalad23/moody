@@ -29,7 +29,7 @@ async function EditorPage({ params }: { params: { id: string } }) {
       <div className="col-span-2">
         <Editor entry={entry} />
       </div>
-      <div className="border rounded-lg shadow-md min-h-[500px] max-h-[700px]">
+      <div className="border rounded-lg shadow-md">
         <div className="bg-sky-500 text-white px-6 py-4 rounded-t-lg">
           <h2 className="text-2xl font-bold">Analysis</h2>
         </div>

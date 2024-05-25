@@ -1,5 +1,4 @@
 "use client";
-
 import { updateEntry } from "@/utils/api";
 import React from "react";
 import { useAutosave } from "react-autosave";
@@ -17,6 +16,7 @@ type Props = {
 const Editor = (props: Props) => {
   const [value, setValue] = React.useState(props.entry.content);
   const [isLoading, setIsLoading] = React.useState(false);
+
   useAutosave({
     data: value,
     onSave: async (_val) => {
@@ -27,12 +27,13 @@ const Editor = (props: Props) => {
   });
 
   return (
-    <div className="w-full h-full">
+    <div className="relative w-full h-full">
       {isLoading && <div>Loading...</div>}
       <textarea
-        className="w-full h-full p-8 text-xl outline-none"
+        className="w-full h-full p-8 text-xl outline-none rounded-lg shadow-md border border-gray-800/12 resize-none"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        placeholder="Start writing..."
       />
     </div>
   );
