@@ -11,7 +11,7 @@ function DashBoardLayout(props: Props) {
         MooDy
       </aside>
       <div className="ml-[200px] h-full">
-        <header className="h-[60px]">
+        <header className="h-[60px] border-b border-gray-800/12">
           <div className="h-full w-full px-6 flex items-center justify-end">
             <UserButton />
           </div>

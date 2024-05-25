@@ -1,5 +1,6 @@
 import { getUserByClerkId } from "@/utils/auth"
 import { prisma } from "@/utils/db"
+import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 
 export const POST = async () => {
@@ -10,6 +11,8 @@ export const POST = async () => {
             content: 'Write about your day here!'
         },
     })
+
+    revalidatePath('/journal')
 
     return NextResponse.json({ data: entry })
 }

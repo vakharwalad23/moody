@@ -24,8 +24,8 @@ type Props = {
 const EntryCard = (props: Props) => {
   const date = new Date(props.entry.createdAt).toDateString();
   return (
-    <div className="divide-y divide-gray-800/12 overflow-hidden rounded-lg bg-white transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-lg">
-      <div className="px-4 py-5 sm:px-6">{date}</div>
+    <div className="overflow-hidden rounded-lg bg-white transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-lg">
+      <div className="px-4 py-5 sm:px-6 text-slate-500">{date}</div>
       <div className="px-4 py-5 sm:p-6">{props.entry.Analysis?.summary}</div>
       <div className="px-4 py-4 sm:px-6">{props.entry.Analysis?.mood}</div>
     </div>

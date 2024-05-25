@@ -3,6 +3,7 @@ import { prisma } from "@/utils/db";
 import { getUserByClerkId } from "@/utils/auth";
 import NewEntryCard from "@/components/EntryCard/NewEntryCard";
 import EntryCard from "@/components/EntryCard";
+import Link from "next/link";
 
 type Props = {};
 
@@ -31,7 +32,9 @@ async function JournalPage({}: Props) {
       <div className="grid grid-cols-3 gap-4">
         <NewEntryCard />
         {journalEntries.map((entry) => (
-          <EntryCard entry={entry} key={entry.id} />
+          <Link href={`/journal/${entry.id}`} key={entry.id}>
+            <EntryCard entry={entry} />
+          </Link>
         ))}
       </div>
     </div>
