@@ -46,6 +46,7 @@ model Analysis {
 
   mood     String
   summary  String  @db.Text
+  subject  String
   color    String
   negative Boolean
 
