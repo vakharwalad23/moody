@@ -42,7 +42,7 @@ model Analysis {
   id String @id @default(uuid())
 
   entryId      String
-  JournalEntry JournalEntry @relation(fields: [entryId], references: [id])
+  JournalEntry JournalEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
 
   mood     String
   summary  String  @db.Text
