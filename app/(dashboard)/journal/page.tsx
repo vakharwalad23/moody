@@ -4,6 +4,7 @@ import { getUserByClerkId } from "@/utils/auth";
 import NewEntryCard from "@/components/EntryCard/NewEntryCard";
 import EntryCard from "@/components/EntryCard";
 import Link from "next/link";
+import Question from "@/components/Question";
 
 type Props = {};
 
@@ -29,6 +30,9 @@ async function JournalPage({}: Props) {
   return (
     <div className="p-10 bg-gray-400/5 h-full">
       <h2 className="text-3xl mb-8 font-semibold">Journal</h2>
+      <div className="my-8">
+        <Question />
+      </div>
       <div className="grid grid-cols-3 gap-4">
         <NewEntryCard />
         {journalEntries.map((entry) => (
