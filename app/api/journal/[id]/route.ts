@@ -25,11 +25,12 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         },
         create: {
             entryId: updatedEntry.id,
-            mood: analysis?.mood ?? '',
-            summary: analysis?.summary ?? '',
-            subject: analysis?.subject ?? '',
-            negative: analysis?.negative ?? false,
-            color: analysis?.color ?? '',
+            userId: user.id,
+            mood: 'neutral',
+            summary: 'No summary yet',
+            subject: 'No subject yet',
+            negative: false,
+            color: '#0101fe',
         },
         update: {
             ...analysis

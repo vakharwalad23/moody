@@ -12,6 +12,7 @@ export const POST = async () => {
             content: 'Write about your day here!',
             Analysis: {
                 create: {
+                    userId: user.id,
                     mood: 'neutral',
                     summary: 'No summary yet',
                     subject: 'No subject yet',

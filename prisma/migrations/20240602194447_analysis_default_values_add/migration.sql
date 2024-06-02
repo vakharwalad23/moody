@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Analysis" ALTER COLUMN "mood" SET DEFAULT '',
+ALTER COLUMN "summary" SET DEFAULT '',
+ALTER COLUMN "color" SET DEFAULT '',
+ALTER COLUMN "negative" SET DEFAULT false,
+ALTER COLUMN "subject" SET DEFAULT '';
