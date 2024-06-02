@@ -1,3 +1,4 @@
+import { revalidate } from "@/utils/actions"
 import { analyze } from "@/utils/ai"
 import { getUserByClerkId } from "@/utils/auth"
 import { prisma } from "@/utils/db"
@@ -36,6 +37,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             ...analysis
         }
     })
+
+    revalidate(['/journal'])
 
     return NextResponse.json({ data: { ...updatedEntry, Analysis:updatedAnalysis } })
 }
