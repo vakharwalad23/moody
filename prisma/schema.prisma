@@ -28,7 +28,7 @@ model JournalEntry {
   id      String @id @default(uuid())
   content String @db.Text
 
-  User   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   createdAt DateTime @default(now())
