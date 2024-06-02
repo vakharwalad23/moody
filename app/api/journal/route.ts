@@ -1,7 +1,7 @@
 import { analyze } from "@/utils/ai"
 import { getUserByClerkId } from "@/utils/auth"
 import { prisma } from "@/utils/db"
-import { revalidatePath } from "next/cache"
+import { revalidate } from "@/utils/actions"
 import { NextResponse } from "next/server"
 
 export const POST = async () => {
@@ -22,7 +22,7 @@ export const POST = async () => {
         },
     })
 
-    revalidatePath('/journal')
+    revalidate(['/journal'])
 
     return NextResponse.json({ data: entry })
 }

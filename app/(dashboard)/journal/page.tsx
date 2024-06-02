@@ -28,7 +28,7 @@ const getEntries = async () => {
 async function JournalPage({}: Props) {
   const journalEntries = await getEntries();
   return (
-    <div className="p-10 bg-gray-400/5 h-full">
+    <div className="p-10 bg-gray-400/5 h-full overflow-auto">
       <h2 className="text-3xl mb-8 font-semibold">Journal</h2>
       <div className="my-8">
         <Question />
