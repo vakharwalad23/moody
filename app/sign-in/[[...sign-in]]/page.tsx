@@ -5,8 +5,8 @@ export default function SignInPage() {
     <div className="w-screen h-screen flex justify-center items-center">
       <SignIn
         path="/sign-in"
-        forceRedirectUrl="/new-user"
         signUpUrl="/sign-up"
+        forceRedirectUrl="/journal"
       />
     </div>
   );
