@@ -6,7 +6,7 @@ export default function SignUpPage() {
       <SignUp
         path="/sign-up"
         signInUrl="/sign-in"
-        forceRedirectUrl="/new-user"
+        forceRedirectUrl="/journal"
       />
     </div>
   );

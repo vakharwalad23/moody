@@ -20,6 +20,7 @@
     "react-autosave": "^0.4.4",
     "react-dom": "^18",
     "recharts": "^2.13.0-alpha.4",
+    "svix": "^1.24.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

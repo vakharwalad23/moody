@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export default async function Home() {
   const { userId }: { userId: string | null } = auth();
-  let href = userId ? "/journal" : "/new-user";
+  let href = userId ? "/journal" : "/sign-in";
 
   return (
     <div className="px-5 w-screen h-screen bg-black flex justify-center items-center text-white space-y-5">
