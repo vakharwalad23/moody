@@ -52,7 +52,6 @@ export async function POST(req: Request) {
   // Do something with the payload
   if (evt.type === 'user.created') {
         const { email_addresses, id } =  evt.data
-        console.log(email_addresses[0].email_address, id);
         const match = await prisma.user.findUnique({
           where: { clerkId: id as string },
         });
