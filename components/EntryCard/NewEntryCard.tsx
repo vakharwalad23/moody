@@ -11,10 +11,15 @@ const NewEntryCard = (props: Props) => {
   const router = useRouter();
 
   const handleClick = async () => {
+    if (loading) return;
     setLoading(true);
-    const data = await createNewEntry();
-    setLoading(false);
-    router.push(`/journal/${data.id}`);
+
+    try {
+      const data = await createNewEntry();
+      router.push(`/journal/${data.id}`);
+    } catch (error) {
+      setLoading(false);
+    }
   };
   return (
     <div className="cursor-pointer overflow-hidden rounded-lg bg-white shadow-lg">
