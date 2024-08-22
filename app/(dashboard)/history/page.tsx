@@ -2,11 +2,12 @@ import HistoryChart from "@/components/HistoryChart";
 import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 import React from "react";
+import { User } from "@/utils/definitions";
 
 type Props = {};
 
 const getData = async () => {
-  const user = await getUserByClerkId();
+  const user = (await getUserByClerkId()) as User;
   const analysis = await prisma.analysis.findMany({
     where: {
       userId: user.id,

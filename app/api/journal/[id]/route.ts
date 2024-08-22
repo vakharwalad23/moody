@@ -4,10 +4,11 @@ import { getUserByClerkId } from "@/utils/auth"
 import { prisma } from "@/utils/db"
 import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
+import { User } from "@/utils/definitions"
 
 export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     const { content } = await request.json()
-    const user = await getUserByClerkId()
+    const user = await getUserByClerkId() as User;
     const updatedEntry = await prisma.journalEntry.update({
         where: {
             userId_id: {

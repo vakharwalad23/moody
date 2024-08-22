@@ -2,9 +2,10 @@ import React from "react";
 import Editor from "@/components/Editor";
 import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
+import { User } from "@/utils/definitions";
 
 const getEntry = async (id: string) => {
-  const user = await getUserByClerkId();
+  const user = (await getUserByClerkId()) as User;
   const entry = await prisma.journalEntry.findUnique({
     where: { userId_id: { userId: user.id, id } },
     include: {

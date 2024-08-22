@@ -3,9 +3,10 @@ import { getUserByClerkId } from "@/utils/auth"
 import { prisma } from "@/utils/db"
 import { revalidate } from "@/utils/actions"
 import { NextResponse } from "next/server"
+import { User } from "@/utils/definitions"
 
 export const POST = async () => {
-    const user = await getUserByClerkId()
+    const user = await getUserByClerkId() as User;
     const entry = await prisma.journalEntry.create({
         data: {
             userId: user.id,
