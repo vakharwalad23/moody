@@ -5,11 +5,21 @@ import NewEntryCard from "@/components/EntryCard/NewEntryCard";
 import EntryCard from "@/components/EntryCard";
 import Link from "next/link";
 import Question from "@/components/Question";
+import { auth, currentUser, User } from "@clerk/nextjs/server";
 
 type Props = {};
 
 const getEntries = async () => {
-  const user = await getUserByClerkId();
+  let user = await getUserByClerkId();
+  if (!user) {
+    const { id, emailAddresses } = (await currentUser()) as User;
+    user = await prisma.user.create({
+      data: {
+        clerkId: id as string,
+        email: emailAddresses[0].emailAddress as string,
+      },
+    });
+  }
   const journalEntries = await prisma.journalEntry.findMany({
     where: {
       userId: user.id,
