@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MooDy: A Retrieval-Augmented Generation Daily Sentiment Journal
 
-## Getting Started
+MooDy is an advanced journaling system that leverages Retrieval-Augmented Generation (RAG) models for insightful daily journaling. It offers a comprehensive platform for personal reflection and emotional well-being tracking.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Rich Journal Entries**: Create detailed daily journal entries with ease.
+- **GPT-Powered Summaries**: Automatically generate insightful summaries of your entries.
+- **Mood Analysis**: Track and analyze your mood over time.
+- **Sentiment Tracking**: Gain deeper understanding of your emotional patterns.
+- **Color-Coded Subject Analysis**: Visualize the themes and subjects in your journal entries.
+- **Natural Language Querying**: Interact with your journal using natural language.
+- **Interactive Mood Graphs**: Visualize your emotional journey through interactive graphs.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Built with a robust and modern tech stack:
+- Next.js
+- TypeScript
+- LangChain
+- Clerk (for authentication)
+- PostgreSQL
+- Prisma ORM
+- OpenAI's GPT models for natural language processing
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 🔒 Security
 
-## Learn More
+MooDy prioritizes user privacy and data security:
+- Robust authentication system
+- Secure data management
 
-To learn more about Next.js, take a look at the following resources:
+## 💡 Why MooDy?
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+MooDy seamlessly integrates advanced features to enhance personal reflection and well-being tracking. By utilizing cutting-edge AI technologies, it provides a unique and insightful journaling experience that goes beyond traditional methods.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Get started with MooDy today and transform your journaling experience!
