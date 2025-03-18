@@ -89,6 +89,8 @@ export const QA = async (question: string, entries: QuestionEntry[]) => {
     });
   });
 
+  const enhancedQuestion = `I want you to act as a helpful AI assistant analyzing personal journal entries. Provide thoughtful, accurate responses based solely on the content provided. Maintain a supportive and empathetic tone. If information isn't available in the entries, acknowledge this limitation rather than making assumptions. Consider emotional context and nuance when interpreting the journal content.Please answer the question based on the journal entries provided. If the question is not related to the journal entries, please respond with "I cannot answer that." \n\nOriginal question: ${question}`;
+
   const model = new ChatGoogleGenerativeAI({
     temperature: 0,
     modelName: "gemini-1.5-pro",
@@ -104,7 +106,7 @@ export const QA = async (question: string, entries: QuestionEntry[]) => {
 
   const resp = await chain._call({
     input_documents: releventDocs,
-    question,
+    question: enhancedQuestion,
   });
 
   return resp.output_text;
