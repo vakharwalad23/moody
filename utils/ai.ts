@@ -97,7 +97,7 @@ export const QA = async (question: string, entries: QuestionEntry[]) => {
   const chain = loadQARefineChain(model);
   const embeddings = new GoogleGenerativeAIEmbeddings({
     apiKey: process.env.GOOGLE_API_KEY,
-    modelName: "embedding-004",
+    modelName: "text-embedding-004",
   });
   const store = await MemoryVectorStore.fromDocuments(docs, embeddings);
   const releventDocs = await store.similaritySearch(question);
