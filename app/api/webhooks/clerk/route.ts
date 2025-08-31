@@ -52,19 +52,23 @@ export async function POST(req: Request) {
   // Do something with the payload
   if (evt.type === "user.created") {
     const { email_addresses, id } = evt.data;
-    const match = await prisma.user.findUnique({
-      where: { clerkId: id as string },
+    const user = await prisma.user.upsert({
+      where: {
+        clerkId: id as string,
+      },
+      update: {
+        email: email_addresses[0].email_address as string,
+      },
+      create: {
+        clerkId: id as string,
+        email: email_addresses[0].email_address as string,
+      },
     });
-    if (!match) {
-      await prisma.user.create({
-        data: {
-          clerkId: id as string,
-          email: email_addresses[0].email_address as string,
-        },
-      });
-    }
 
-    return NextResponse.json({ data: id, message: "User Created" });
+    return NextResponse.json({
+      data: user.id,
+      message: "User Created or Updated",
+    });
   }
 
   return new Response("", { status: 200 });

@@ -13,8 +13,14 @@ const getEntries = async () => {
   let user = await getUserByClerkId();
   if (!user) {
     const { id, emailAddresses } = (await currentUser()) as User;
-    user = await prisma.user.create({
-      data: {
+    user = await prisma.user.upsert({
+      where: {
+        clerkId: id as string,
+      },
+      update: {
+        email: emailAddresses[0].emailAddress as string,
+      },
+      create: {
         clerkId: id as string,
         email: emailAddresses[0].emailAddress as string,
       },
