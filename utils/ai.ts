@@ -8,7 +8,8 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { QuestionEntry } from "./definitions";
 import { Document } from "langchain/document";
 import { loadQARefineChain } from "langchain/chains";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { PineconeStore } from "@langchain/pinecone";
+import { Pinecone } from "@pinecone-database/pinecone";
 
 const promptSchemaParser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -35,6 +36,10 @@ const promptSchemaParser = StructuredOutputParser.fromZodSchema(
   })
 );
 
+const pinecone = new Pinecone({
+  apiKey: process.env.PINECONE_API_KEY!,
+});
+
 const getPrompt = async (content: string) => {
   const format_instructions = promptSchemaParser.getFormatInstructions();
 
@@ -56,13 +61,13 @@ export const analyze = async (content: string) => {
   const inputPrompt = await getPrompt(content);
   const geminiModel = new ChatGoogleGenerativeAI({
     temperature: 0,
-    modelName: "gemini-1.5-pro",
+    modelName: "gemini-2.5-flash-lite",
     apiKey: process.env.GOOGLE_API_KEY,
   });
-  const result = await geminiModel.invoke(inputPrompt);
 
   try {
-    // Handle potential complex MessageContent structure
+    const result = await geminiModel.invoke(inputPrompt);
+
     const textContent =
       typeof result.content === "string"
         ? result.content
@@ -74,40 +79,108 @@ export const analyze = async (content: string) => {
 
     return promptSchemaParser.parse(textContent);
   } catch (error) {
-    console.error("Error parsing AI response:", error);
+    return {
+      mood: "neutral",
+      summary: "Analysis temporarily unavailable",
+      subject: "General entry",
+      negative: false,
+      color: "#808080",
+      sentimentScore: 0,
+    };
   }
 };
 
-export const QA = async (question: string, entries: QuestionEntry[]) => {
-  const docs = entries.map((entry) => {
-    return new Document({
-      pageContent: entry.content,
-      metadata: {
-        id: entry.id,
-        createdAt: entry.createdAt,
-      },
+export const storeJournalEntry = async (
+  entry: QuestionEntry,
+  userId: string
+) => {
+  try {
+    const embeddings = new GoogleGenerativeAIEmbeddings({
+      apiKey: process.env.GOOGLE_API_KEY,
+      modelName: "text-embedding-004",
     });
-  });
 
-  const enhancedQuestion = `I want you to act as a helpful AI assistant analyzing personal journal entries. Provide thoughtful, accurate responses based solely on the content provided. Maintain a supportive and empathetic tone. If information isn't available in the entries, acknowledge this limitation rather than making assumptions. Consider emotional context and nuance when interpreting the journal content.Please answer the question based on the journal entries provided. If the question is not related to the journal entries, please respond with "I cannot answer that." \n\nOriginal question: ${question}`;
+    const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX_NAME!);
 
-  const model = new ChatGoogleGenerativeAI({
-    temperature: 0,
-    modelName: "gemini-1.5-pro",
-    apiKey: process.env.GOOGLE_API_KEY,
-  });
-  const chain = loadQARefineChain(model);
-  const embeddings = new GoogleGenerativeAIEmbeddings({
-    apiKey: process.env.GOOGLE_API_KEY,
-    modelName: "text-embedding-004",
-  });
-  const store = await MemoryVectorStore.fromDocuments(docs, embeddings);
-  const releventDocs = await store.similaritySearch(question);
+    const embedResult = await embeddings.embedDocuments([entry.content]);
 
-  const resp = await chain._call({
-    input_documents: releventDocs,
-    question: enhancedQuestion,
-  });
+    await pineconeIndex.namespace(`user_${userId}`).upsert([
+      {
+        id: entry.id,
+        values: embedResult[0],
+        metadata: {
+          id: entry.id,
+          userId: userId,
+          createdAt: entry.createdAt.toISOString(),
+          content: entry.content,
+        },
+      },
+    ]);
+  } catch (error) {}
+};
 
-  return resp.output_text;
+export const updateJournalEntry = async (
+  entry: QuestionEntry,
+  userId: string
+) => {
+  try {
+    await storeJournalEntry(entry, userId);
+  } catch (error) {}
+};
+
+export const deleteJournalEntry = async (entryId: string, userId: string) => {
+  try {
+    const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX_NAME!);
+    await pineconeIndex.namespace(`user_${userId}`).deleteOne(entryId);
+  } catch (error) {}
+};
+
+export const QA = async (question: string, userId: string) => {
+  try {
+    const enhancedQuestion = `I want you to act as a helpful AI assistant analyzing personal journal entries. Provide thoughtful, accurate responses based solely on the content provided. Maintain a supportive and empathetic tone. If information isn't available in the entries, acknowledge this limitation rather than making assumptions. Consider emotional context and nuance when interpreting the journal content. Please answer the question based on the journal entries provided. If the question is not related to the journal entries, please respond with "I cannot answer that." \n\nOriginal question: ${question}`;
+
+    const model = new ChatGoogleGenerativeAI({
+      temperature: 0,
+      modelName: "gemini-2.5-flash-lite",
+      apiKey: process.env.GOOGLE_API_KEY,
+    });
+
+    const embeddings = new GoogleGenerativeAIEmbeddings({
+      apiKey: process.env.GOOGLE_API_KEY,
+      modelName: "text-embedding-004",
+    });
+
+    const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX_NAME!);
+
+    const questionEmbedding = await embeddings.embedQuery(question);
+
+    const queryResult = await pineconeIndex.namespace(`user_${userId}`).query({
+      vector: questionEmbedding,
+      topK: 4,
+      includeMetadata: true,
+    });
+
+    if (queryResult.matches.length === 0) {
+      return "I don't have any journal entries to analyze. Please add some journal entries first.";
+    }
+
+    const relevantDocs = queryResult.matches.map(
+      (match) =>
+        new Document({
+          pageContent: (match.metadata?.content as string) || "",
+          metadata: match.metadata,
+        })
+    );
+
+    const chain = loadQARefineChain(model);
+
+    const resp = await chain._call({
+      input_documents: relevantDocs,
+      question: enhancedQuestion,
+    });
+
+    return resp.output_text;
+  } catch (error) {
+    return "I'm sorry, I encountered an error while analyzing your journal entries. Please try again later.";
+  }
 };

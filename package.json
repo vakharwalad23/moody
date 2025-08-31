@@ -13,6 +13,8 @@
     "@clerk/nextjs": "^5.0.12",
     "@langchain/core": "^0.2.1",
     "@langchain/google-genai": "^0.0.19",
+    "@langchain/pinecone": "^0.2.0",
+    "@pinecone-database/pinecone": "^6.1.2",
     "@prisma/client": "^6.15.0",
     "@prisma/extension-accelerate": "^2.0.2",
     "langchain": "^0.2.2",
